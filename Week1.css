@@ -1,0 +1,37 @@
+.container{
+    margin: auto;
+    width: 1200px;
+    border: 2px solid #E8E8E8;
+    padding: 10px;
+}
+
+.header{
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.header .text{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.text_content{
+    margin-bottom: 2px;
+}
+
+.separator{
+    width: 100%;
+    height: 1px;
+    background-color: #d2d2d2;
+    margin-bottom: 20px;
+}
+
+.main{
+    margin-bottom: 20px;
+}
+
+.main img{
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+}
