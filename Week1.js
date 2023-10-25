@@ -42,16 +42,16 @@
 const dataSubmit = document.querySelector('#data_submit')
 dataSubmit.addEventListener('click', getMessage)
 
-function getMessage(){
+function getMessage(event){
     event.preventDefault();
     const message = document.querySelector('.message_content').value;
     const fig = document.querySelector('#file').files[0]
-    console.log(message,fig)
+    
     // 创建一个 FormData 对象
     let formData = new FormData();
     formData.append('message', message); // 添加消息内容
     formData.append('file', fig); // 添加文件
-
+    console.log(formData)
     fetch("/api/message", {
         method: 'POST',
         body: formData,

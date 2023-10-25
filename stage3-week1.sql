@@ -1,0 +1,15 @@
+SHOW DATABASES;
+CREATE DATABASE stage3week1;
+USE stage3week1;
+SHOW TABLES;
+
+CREATE TABLE messages(
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    URL_image TEXT,
+    message TEXT
+);
+
+SELECT * FROM messages;
+
+DROP TABLE messages;
+DROP DATABASE messages;
