@@ -62,6 +62,7 @@ async function handleError(error) {
 
 function autoCreateDiv(data){
     let main = document.querySelector('.main')
+    main.innerHTML = '';
     for(let i =0;i < data.data.length; i++){
         let messages = data.data[i].message;
         let images = data.data[i].URL_image;
