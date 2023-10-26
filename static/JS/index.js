@@ -38,11 +38,10 @@
 //             }
 // getData();
 
-
 const dataSubmit = document.querySelector('#data_submit')
 dataSubmit.addEventListener('click', getMessage)
 
-function getMessage(event){
+async function getMessage(event){
     event.preventDefault();
     const message = document.querySelector('.message_content').value;
     const fig = document.querySelector('#file').files[0]
@@ -52,22 +51,33 @@ function getMessage(event){
     formData.append('message', message); // 添加消息内容
     formData.append('file', fig); // 添加文件
     console.log(formData)
-    fetch("/api/message", {
-        method: 'POST',
-        body: formData,
-    })
-    .then(handleResponse)
-    .then(data => console.log(data))
-    .catch(handleError);
+    
+    try{
+        const response = await fetchData(formData);
+        const data = await handleResponse(response);
+        console.log(data);
+    }catch(error){
+        handleError(error);
+    }
 }
 
-function handleResponse(response) {
+async function fetchData(formData){
+    const response = fetch("/api/getmessage", {
+        method: 'POST',
+        body: formData,
+    });
+    return response;
+}
+
+async function handleResponse(response) {
     if (!response.ok) {
         throw new Error('Get null from backend');
     }
     return response.json();
 }
 
-function handleError(error) {
+async function handleError(error) {
     console.error('Backend could got problems', error);
 }
+
+

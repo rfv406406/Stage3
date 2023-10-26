@@ -1,7 +1,9 @@
+
 from flask import *
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 import os, boto3
+
 load_dotenv()
 
 app=Flask(__name__)
@@ -30,8 +32,12 @@ BUCKET_NAME = os.getenv('BUCKET_NAME')
 # 建立新的 S3 用戶端實例，設定區域和認證資訊
 s3_client = boto3.client('s3', 
                         region_name = S3_BUCKET_REGION,
-                        access_key = ACCESS_KEY,
-                        secret_access_key = SECRET_ACCESS_KEY)
+                        aws_access_key_id = ACCESS_KEY,
+                        aws_secret_access_key = SECRET_ACCESS_KEY) 
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 @app.route("/api/getmessage", methods = ["POST"])
 
