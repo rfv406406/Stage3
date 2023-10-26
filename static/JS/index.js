@@ -1,7 +1,7 @@
 fetchData();
 async function fetchData() {
     try {
-        const response = await getData(); // 如果 fetchData 需要 formData 参数，请传递适当的值
+        const response = await getData(); 
         const data = await handleResponse(response);
         console.log(data);
         autoCreateDiv(data);

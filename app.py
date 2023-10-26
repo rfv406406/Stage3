@@ -44,7 +44,7 @@ def index():
 def get_message():
     if request.method == "POST":
         try:
-            message = request.form.get('message')  # 获取文本信息
+            message = request.form.get('message')  
             image = request.files.get('file')
 
             if not message or message.strip() == "":
@@ -90,4 +90,5 @@ def get_message():
             if connection:
                 connection.close()
             return jsonify({"error": True,"message": "databaseError"}), 500
+        
 app.run(debug=True, host="0.0.0.0", port=4000)
