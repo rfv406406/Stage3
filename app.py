@@ -2,7 +2,7 @@
 from flask import *
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
-import os, boto3
+import os, boto3, time
 
 load_dotenv()
 
@@ -39,41 +39,58 @@ s3_client = boto3.client('s3',
 def index():
     return render_template("index.html")
 
-@app.route("/api/getmessage", methods = ["POST"])
+@app.route("/api/getmessage", methods = ["GET","POST"])
 
 def get_message():
-    try:
-        message = request.form.get('message')  # 获取文本信息
-        image = request.files.get('image')
+    if request.method == "POST":
+        try:
+            message = request.form.get('message')  # 获取文本信息
+            image = request.files.get('file')
 
-        if message == "":
-            return '留言啦', 400
-        
-        if image.filename:
-            return '沒有上傳檔案', 400
-        
-        if image and image.filename.endswith(('jpg', 'jpeg', 'png', 'jfif')):
-            filename = secure_filename(image.filename)
-            key = f"{str(int(time.time()))}-{filename}" # 生成檔案名稱
+            if not message or message.strip() == "":
+                return jsonify(error='留言啦'), 400
+            
+            if image is None or image.filename == "":
+                return jsonify(error='沒有上傳檔案'), 400
+            
+            if image and image.filename.endswith(('jpg', 'jpeg', 'png', 'jfif')):
+                filename = secure_filename(image.filename)
+                key = f"{str(int(time.time()))}-{filename}" # 生成檔案名稱
 
-        s3_client.upload_fileobj(image, BUCKET_NAME, key)
-        image_url = f"https://{BUCKET_NAME}.s3.{S3_BUCKET_REGION}.amazonaws.com/{key}"
-
-        connection = con.get_connection()
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("INSERT INTO messages(URL_image, message) VALUES(%s, %s)", (message, image_url))
-        connection.commit()
-        
-        cursor.execute("SELECT * FROM messages")
-        data = cursor.fetchall()
-        cursor.close()
-        connection.close()
-        return jsonify({"message": data['message'], "URL_image": data['URL_image']}), 200
-    except mysql.connector.Error:
-        if cursor:
+            s3_client.upload_fileobj(image, BUCKET_NAME, key)
+            image_url = f"https://{BUCKET_NAME}.s3.{S3_BUCKET_REGION}.amazonaws.com/{key}"
+            
+            connection = con.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("INSERT INTO messages(URL_image, message) VALUES(%s, %s)", (image_url, message))
+            connection.commit()
             cursor.close()
-        if connection:
             connection.close()
-        return jsonify({"error": True,"message": "databaseError"}), 500
-
-app.run(debug=None, host="0.0.0.0", port=4000)
+            return jsonify({"ok":"True"}), 200
+        except mysql.connector.Error:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+            return jsonify({"error": True,"message": "databaseError"}), 500
+    
+    if request.method == "GET":
+        try:
+            connection = con.get_connection()
+            cursor = connection.cursor(dictionary=True)   
+            cursor.execute("SELECT * FROM messages")
+            data = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            print(data)
+            return_data = {
+                "data":data
+            }
+            return jsonify(return_data), 200
+        except mysql.connector.Error:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+            return jsonify({"error": True,"message": "databaseError"}), 500
+app.run(debug=True, host="0.0.0.0", port=4000)
