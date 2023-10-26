@@ -22,7 +22,7 @@ async function getMessage(event){
     let formData = new FormData();
     formData.append('message', message); // 添加消息内容
     formData.append('file', fig); // 添加文件
-    console.log(formData)
+    // console.log(formData)
     
     try{
         const response = await inputData(formData);
@@ -62,7 +62,6 @@ async function handleError(error) {
 
 function autoCreateDiv(data){
     let main = document.querySelector('.main')
-    let separator = document.querySelector('.separator')
     for(let i =0;i < data.data.length; i++){
         let messages = data.data[i].message;
         let images = data.data[i].URL_image;
@@ -70,11 +69,13 @@ function autoCreateDiv(data){
         let text = document.createElement('text');
         text.textContent = messages;
         main.appendChild(text);
-        let figContainer = document.createElement('div');
-        let fig = document.createElement('img')
-        fig.src = images;
-        figContainer.appendChild(fig)
-        main.appendChild(figContainer);
+        if(images){
+            let figContainer = document.createElement('div');
+            let fig = document.createElement('img')
+            fig.src = images;
+            figContainer.appendChild(fig)
+            main.appendChild(figContainer);
+        };
 
         let separator = document.createElement('div');
         separator.classList.add('separator');

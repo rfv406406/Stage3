@@ -48,17 +48,14 @@ def get_message():
             image = request.files.get('file')
 
             if not message or message.strip() == "":
-                return jsonify(error='留言啦'), 400
+                return jsonify({"error":"留言啦"}), 400
             
-            if image is None or image.filename == "":
-                return jsonify(error='沒有上傳檔案'), 400
-            
+            image_url = None
             if image and image.filename.endswith(('jpg', 'jpeg', 'png', 'jfif')):
                 filename = secure_filename(image.filename)
                 key = f"{str(int(time.time()))}-{filename}" # 生成檔案名稱
-
-            s3_client.upload_fileobj(image, BUCKET_NAME, key)
-            image_url = f"https://{BUCKET_NAME}.s3.{S3_BUCKET_REGION}.amazonaws.com/{key}"
+                s3_client.upload_fileobj(image, BUCKET_NAME, key)
+                image_url = f"https://{BUCKET_NAME}.s3.{S3_BUCKET_REGION}.amazonaws.com/{key}"
             
             connection = con.get_connection()
             cursor = connection.cursor(dictionary=True)
