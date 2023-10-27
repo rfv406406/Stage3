@@ -60,7 +60,7 @@ def get_message():
                 filename = secure_filename(image.filename)
                 key = f"{str(int(time.time()))}-{filename}" # 生成檔案名稱
                 s3_client.upload_fileobj(image, BUCKET_NAME, key)
-                image_url = f"https://{BUCKET_NAME}.s3.{S3_BUCKET_REGION}.amazonaws.com/{key}"
+                image_url = f"https://d1hxt3hn1q2xo2.cloudfront.net/{key}"
             
             connection = con.get_connection()
             cursor = connection.cursor(dictionary=True)
