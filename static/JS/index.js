@@ -35,7 +35,7 @@ async function getMessage(event){
 }
 
 async function inputData(formData){
-    const response = fetch("/api/getmessage", {
+    const response = await fetch("/api/getmessage", {
         method: 'POST',
         body: formData,
     });
@@ -43,7 +43,7 @@ async function inputData(formData){
 }
 
 async function getData(){
-    const response = fetch("/api/getmessage", {
+    const response = await fetch("/api/getmessage", {
         method: 'GET',
     });
     return response;
