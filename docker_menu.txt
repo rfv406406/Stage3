@@ -1,0 +1,70 @@
+docker build -t ImageName .
+	// 建立映像檔
+	// "." 加入全部的檔案；u32; 以當前目錄基準建立image檔案
+
+這步不確定:
+docker tag ImageName:latest UserID/ImageName
+	// 建立標籤才能上傳
+	// 記得要先建立 docker repo
+	// latest 是 Image 的 tag
+
+docker push UserID/ImageName
+	// 上傳檔案
+
+docker pull UserID/ImageName
+	// 下載檔案
+
+docker run -d -p 3000:3000 ImageName
+docker run -d --name ImageName -p 8080:8080 --rm ImageName
+	// 將  image 檔轉成 container 並運行
+	// -d 背景執行(如果沒 -d 我不知道怎麼跳出，有 -d 不會進入那個奇怪的 mode)
+	// -p -> port
+	// 3000:3000 -> EC2 port:Docker Port
+	// -rm -> 停止container運行時刪除container
+
+docker ps
+	// 查詢 docker 執行中的容器
+
+docker ps -a
+	// 能顯示沒有 run 的 container
+	// 取得 ContainerID
+
+docker stop ContainerID
+	// 停止該容器運行
+
+docker cp .env ContainerID:/app/
+	// 複製 .env 檔案到 docker container 中:
+	// cp 複製，覆蓋優先
+	// 防覆蓋 用 cp -i 會有選擇選項
+	// app 是我 設定的檔案路徑
+
+docker start ContainerID
+	// 啟用指定的 docker container
+
+docker images
+	// 列出所有 Image
+
+docker rm ContainerID
+	// 刪除指定 container
+
+docker rmi image_id
+	// 刪除指定 Image
+
+docker system prune --volumes
+	// 永久刪除用不到的資料，實際功能沒有很確定
+
+EC2
+
+sudo apt-get update  //更新
+sudo apt-get install docker.io //安裝
+sudo systemctl start docker //啟動
+sudo systemctl enable docker //啟動時自動運行
+
+sudo docker pull UserID/ImageName //pull
+sudo docker run -d -p 4001:4001 rfv406406/stage3 //run container
+
+sudo docker ps // see運行 Container
+docker exec -it [容器ID或名稱] ps aux  //容器內運行的程式
+sudo lsof -i :4001 //具體在該端口運行程式
+
+--restart=always 

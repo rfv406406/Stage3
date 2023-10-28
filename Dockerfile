@@ -1,5 +1,5 @@
 # 使用官方 Python 映像作為基本映像
-FROM python:3.11.1
+FROM python:3.12.0
 
 # 設定工作目錄，所有複製後的文件會在此資料夾下
 WORKDIR /app
