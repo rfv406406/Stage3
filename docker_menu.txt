@@ -1,6 +1,6 @@
 docker build -t ImageName .
 	// 建立映像檔
-	// "." 加入全部的檔案；u32; 以當前目錄基準建立image檔案
+	// "." 加入全部的檔案；以當前目錄基準建立image檔案
 
 這步不確定:
 docker tag ImageName:latest UserID/ImageName
@@ -66,5 +66,7 @@ sudo docker run -d -p 4001:4001 rfv406406/stage3 //run container
 sudo docker ps // see運行 Container
 docker exec -it [容器ID或名稱] ps aux  //容器內運行的程式
 sudo lsof -i :4001 //具體在該端口運行程式
+
+sudo docker exec -it d4a2f9e37183 bash //進入容器shell //等同一般開啟EC2，查看檔案那樣。
 
 --restart=always 
